@@ -11,5 +11,6 @@ Data distribution:
   - Also tends to overfit a TON to the training set; seeing good results for the first ~10 epochs lowering both training loss and test loss, but after that the loss graphs diverge a ton. The training loss almost compresses it's knowledge down to optimize for the training set only; as in capitalizing on the fact most images are from Brazil/Europe/Australia and only guessing there. As a result, it just gives up on guessing everywhere else.
   - The splotches are pretty big; my `sigma` value for the normal distribution around the target location when training for 80 epochs was 2, which creates a blob around the size of America.
   - Will update to the new dataset and see how it goes, will be more accurate.
+  - Adaptive learning rate?
 
   ![](loss_graph.png)
