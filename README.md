@@ -13,4 +13,11 @@ Data distribution:
   - Will update to the new dataset and see how it goes, will be more accurate.
   - Adaptive learning rate?
 
-  ![](loss_graph.png)
+- Update 12/4; added batch norm, dropout, and L2 regularization to combat overfitting; results are mixed:
+  - The loss graphs look much better now; train/test loss no longer diverge as badly as before
+  - However, the model now just guesses the entire distribution; instead of overfitting to the training set, it just ends up matching the shape of the target distribution
+  - Varying the `sigma` value shows that the tighter the Gaussian target, the more the model adheres to the shape of the Earth, but it still just guesses the dataset distribution
+  - The guess distributions end up looking like the target distributions; the model learns to approximate the prior instead of making specific guesses
+
+  ![](images/distribution.jpg)
+

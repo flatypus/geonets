@@ -19,7 +19,10 @@ For most professionals, on the other hand, the game is actually a game of mental
 
 == Basic Probability
 
-#figure(image("rainbolt.png", width: 60%), caption: [Distributions of features in Indonesia narrow down North Sumatra.])
+#figure(
+  image("images/rainbolt.png", width: 60%),
+  caption: [Distributions of features in Indonesia narrow down North Sumatra.],
+)
 
 Here, a professional, in less than 10 seconds, combines his knowledge of palm tree plantations mostly being in Sumatra and Kalimantan, with the satellite dish pointing to a point near the equator, along with the tin roofs to narrow it down to north Sumatra. In probability terms, if the professional had noticed all of these things and was trying to pick a country, they would make the following decision:
 $
@@ -28,7 +31,7 @@ $
 $
 In other words:
 $
-  P("location" | "image") = (product^"all features"_"feature" P("feature" | "location"))/(sum^"all locations"_"location" product^"all features"_"feature" P("feature" | "location"))
+  P("guess_location" | "image") = (product^"all features"_"feature" P("feature" | "guess_location"))/(sum^"all locations"_"location" product^"all features"_"feature" P("feature" | "location"))
 $
 
 At first glance, a player will probably arrive at a few main location candidates in a split second, before slowly going through the features with these candidates in mind. Most players have the distributions of everything from camera generations, car types, crop farms, and more memorized! This might insane, that every player makes this complex probability calculation on each map; but this is actually how players play the game. Approximating, or "hedging" (real term!) their guess allows them to maximize the probability that their guess is as close to the target as possible.
@@ -44,7 +47,7 @@ My video will go over more of the process, but in principle, I wanted to approac
 
 I trained on a small, 10,000 image dataset (#link("https://kaggle.com/paulchambaz/google-street-view")[from Kaggle]), which had this distribution:
 
-#align(center)[#image("earth_dist.png", width: 60%, fit: "contain")]
+#align(center)[#image("images/earth_dist.png", width: 60%, fit: "contain")]
 
 One key thing to note is that not every country in GeoGuessr exists on Streetview, and certain places just have a lot denser coverage. The uneveness of this dataset (and several datasets I tried) meant the resulting guesses inadvertently ended up looking a lot like the dataset distribution.
 
@@ -69,19 +72,23 @@ Regardless, here are some of the results!
 
 #align(center)[
   #grid(
-    columns: (1fr, 1.074fr, 3fr),
+    columns: (1fr, 1.074fr, 0.925fr, 0.891fr, 2fr),
     gutter: 5pt,
-    image("good1.png"), image("good2.png"), image("old_loss_graph.png", width: 110%),
+    image("images/good1.png"),
+    image("images/good2.png"),
+    image("images/good4.png"),
+    image("images/good3.png"),
+    image("images/old_loss.png"),
   )
 ]
 
-The first two look promising; my model seems to be pretty good at determining Brazil and Australia. Brazil usually has a distinctive red soil, short vegetation, and asphalt road, while Australia is even more distinctive. However, the loss graphs show that the model learns its training dataset very well, getting to a point where it almost memorizes the trainset, while the test dataset drops for a bit, then slowly increases as the model overfits to the training set.
+The images actually look promising; my model seems to be pretty good at determining Brazil and Australia. Brazil usually has a distinctive red soil, short vegetation, and asphalt road, while Australia is even more distinctive. It even gets the tough South Africa guess at the end! However, the loss graphs show that the model learns its training dataset very well, getting to a point where it almost memorizes the trainset, while the test dataset drops for a bit, then slowly increases as the model overfits to the training set.
 
 At this point, I add in L2 regularization and dropout, attempting to force the model to stop overfitting to my test dataset. Unfortunately, while the train/test loss now looked better, the model just ended up guessing the entire distribution:
 
-#image("distribution.jpg")
+#image("images/distribution.jpg")
 
-Here, I vary my value of sigma that produces the target, and see that the model definitely produces a target distribution guess accordingly.
+Here, I vary my value of sigma that produces the target (how spread out the Gaussian target is) and it's clear that the tighter the Gaussian point, the more the model adheres to the shape of the Earth. Sadly, it doesn't seem to stop it from guessing the target distribution either.
 
 == Conclusion
 So, could I really consider that a success? In the state that my model is at, it's definitely nowhere near usable by a player. Ironically, the model that overfit on it's training set produces "nicer" looking guesses, but definitely can't for predictions at all. If I were to approach the problem with no constraint of hand-writing my layers, I probably would've experimented a lot more with vision transformers and CNNs, or even having it directly predict a top N set of points that could form the distribution instead. Regardless, given the difficulty of this project, I'm surprised that my model was even able to produce a coherent result. And if you've read this far, I'm sure you're looking for what the best models look like. I'll link you to these ones here:
@@ -89,3 +96,5 @@ So, could I really consider that a success? In the state that my model is at, it
 - #link("https://lukashaas.github.io/PIGEON-CVPR24/") Created by Stanford students, and one of the earliest examples of a GeoGuessr model that beats humans!
 - #link("https://huggingface.co/geolocal/StreetCLIP") An approach that leverages image embeddings and vision transformers, but still specific to street view.
 - #link("https://nicolas-dufour.github.io/plonk") My personal favorite paper (of all time), which beautifully approaches the problem from a physics standpoint, and is trained on all sorts of images, not just streetview! This was the paper that inspired me to approach the GeoGuessr challenge from a distributional approach.
+
+Project page: #link("https://github.com/flatypus/geonets")
