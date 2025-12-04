@@ -1,6 +1,6 @@
-# CS109 Challenge
+# CS109 Challenge - Geonets
 
-The goal is no imports (except for numpy). This whole nnet is self-contained.
+A (sort of) working model for geolocation, entirely built with numpy.
 
 Data distribution:
 ![](images/earth_dist.png)
