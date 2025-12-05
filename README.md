@@ -2,7 +2,7 @@
 
 A (sort of) working model for geolocation, entirely built with numpy.
 
-Data distribution:
+[Dataset distribution:](kaggle.com/datasets/paulchambaz/google-street-view)
 ![](images/earth_dist.png)
 
 - Update 11/21; model trains okay on the above dataset; problems remain:
